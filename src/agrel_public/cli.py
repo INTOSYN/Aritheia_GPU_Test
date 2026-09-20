@@ -26,7 +26,7 @@ from .network import PackJob, Transport
 from .packs import cached_pack, load_pack
 from .processes import run_worker
 from .scenarios import assets
-from .scenarios.registry import BUILTIN, OPTIONAL, ORDER, SCENARIOS, configs
+from .scenarios.registry import BUILTIN, OPTIONAL, ORDER, PACKS, SCENARIOS, configs
 from .selection import choose, parse_scenarios
 from .sharing import prepare, upload_preview, withdraw
 
@@ -81,7 +81,8 @@ def parser():
             s.add_argument("--large-scenarios", choices=["skip", "include", "ask"], default=None,
                            help="四个可选大场景：skip=不加入，include=全部加入，ask=逐项询问（交互默认）")
             s.add_argument("--accept-download", action="store_true",
-                           help="授权下载所选可选场景缺失且已钉住 SHA-256 的资产包；不授权上传")
+                           help="授权从原始数据仓库下载所选场景数据；不授权 LLM 模型下载或上传")
+            s.add_argument("--accept-model-download", action="store_true", help="单独同意从官方仓库下载 Qwen3.5-4B（约 9.35 GB）")
             s.add_argument("--asset-release-url", default=None, help="资产包正式发布地址（HTTPS）")
             s.add_argument("--iterations", type=int, default=None, help="每个探针的冻结种子数 1..8；正式检查用默认 8")
             s.add_argument("--steps", type=int, default=8, help="微调场景的 AdamW 更新步数")
@@ -102,6 +103,7 @@ def parser():
     d.add_argument("pack", choices=["singlecell", "literature", "language"])
     d.add_argument("--asset-release-url", default=None)
     d.add_argument("--accept-download", action="store_true")
+    d.add_argument("--accept-model-download", action="store_true")
     add_config(d)
     inst=a.add_parser('install',help='离线安装并校验一个已下载的正式资产 ZIP')
     inst.add_argument('pack',choices=['singlecell','literature','language'])
@@ -219,14 +221,14 @@ def make_downloader(config, release_url, offline):
     url = release_url or config.asset_release_url or os.environ.get("AGREL_ASSET_RELEASE_URL", "")
     transport = Transport(max(config.network_timeout, 30.0), config.allow_local_http)
 
-    def download(pack, manifest, cancel=None):
+    def download(pack, manifest, cancel=None, model_consent=False):
         last = [0]
         def progress(done, total):
             pct = done * 100 // max(total, 1)
             if pct >= last[0] + 10:
                 last[0] = pct
                 say(f"    下载 {pack}: {pct}% ({done:,}/{total:,} bytes)")
-        assets.download_pack(pack, transport, release_url=url or None, manifest=manifest, progress=progress, cancel=cancel)
+        assets.download_pack(pack, transport, release_url=url or None, manifest=manifest, progress=progress, cancel=cancel, model_consent=model_consent)
         say(f"    资产包 {pack} 已校验并安装到 {assets.user_root()}")
     download.release_url = url
     return download
@@ -234,8 +236,9 @@ def make_downloader(config, release_url, offline):
 
 class OptionalAssetJob:
     """Download each pinned optional pack once while the eight built-in scenes run."""
-    def __init__(self, downloader):
+    def __init__(self, downloader, allowed_packs=('singlecell', 'literature')):
         self.downloader = downloader
+        self.allowed_packs = set(allowed_packs)
         self.cancel = threading.Event()
         self.thread = None
         self.completed = []
@@ -248,14 +251,17 @@ class OptionalAssetJob:
                 packs = []
                 for name in OPTIONAL:
                     pack = SCENARIOS[name]['pack']
-                    if not assets.status(name)['ready'] and pack not in packs:
+                    if pack in self.allowed_packs and not assets.status(name)['ready'] and pack not in packs:
                         packs.append(pack)
                 for pack in packs:
                     if self.cancel.is_set():
                         break
                     say(f"  后台准备可选资产：{pack}")
                     try:
-                        self.downloader(pack, manifest, self.cancel)
+                        if pack == 'language':
+                            self.downloader(pack, manifest, self.cancel, model_consent=True)
+                        else:
+                            self.downloader(pack, manifest, self.cancel)
                         self.completed.append(pack)
                     except Exception as exc:
                         self.errors.append({'pack': pack, 'error': type(exc).__name__})
@@ -278,16 +284,16 @@ def guided_asset_countdown(args, config):
         say("本次未启动可选场景资产下载。")
         return None
     downloader = make_downloader(config, args.asset_release_url, False)
-    if not downloader or not downloader.release_url:
+    if not downloader:
         args.optional_skip_reason = "ASSET_RELEASE_URL_MISSING"
-        say("未配置 GitHub Release 资产地址；本次运行八个内置场景，不启动可选资产下载。")
+        say("本次无法启动原始仓库下载。")
         return None
-    if not sys.stdin.isatty() and not args.accept_download:
+    if not sys.stdin.isatty() and not args.accept_download and not getattr(args, 'accept_model_download', False):
         args.optional_skip_reason = "DOWNLOAD_DECLINED"
         say("无人值守运行未提供 --accept-download；跳过可选资产下载。")
         return None
     if sys.stdin.isatty() and not args.accept_download:
-        say("10 秒后将在后台下载四个可选场景的三个校验包；输入 c 后回车可取消。")
+        say("10 秒后从原始仓库下载 PBMC3k 和 SciFact 数据；不包含 LLM 模型。输入 c 后回车可取消。")
         console = TimedConsoleInput()
         for remaining in range(10, 0, -1):
             say(f"  下载倒计时 {remaining:02d}s")
@@ -296,7 +302,15 @@ def guided_asset_countdown(args, config):
                 args.optional_skip_reason = "OPTIONAL_DOWNLOAD_CANCELLED"
                 say("已取消可选资产下载；八个内置场景照常运行。")
                 return None
-    job = OptionalAssetJob(downloader)
+    packs = ['singlecell', 'literature'] if sys.stdin.isatty() or args.accept_download else []
+    model_agreed = getattr(args, 'accept_model_download', False)
+    if not model_agreed and sys.stdin.isatty() and not assets.pack_status('language')['installed']:
+        model_agreed = yes('是否另外同意从 Qwen 官方仓库下载 Qwen3.5-4B（约 9.35 GB，两个 LLM 场景共用）？', default=False)
+    if model_agreed:
+        packs.append('language')
+    else:
+        say('未授权 LLM 模型下载；不会下载模型，已安装且通过校验的模型仍可使用。')
+    job = OptionalAssetJob(downloader, packs)
     job.start()
     return job
 
@@ -308,8 +322,12 @@ def guided_optional_scope(job, missing_reason="DOWNLOAD_UNAVAILABLE"):
         if state["ready"]:
             ready.append(name)
         else:
+            pack = SCENARIOS[name]['pack']
+            declined = job and pack not in getattr(job, 'allowed_packs', PACKS)
+            failed = job and any(e.get('pack') == pack for e in job.errors)
             reason = "ASSET_INTEGRITY_ERROR" if state.get("integrity_error") else (
-                "DOWNLOAD_FAILED" if job and job.errors else
+                "DOWNLOAD_DECLINED" if declined else
+                "DOWNLOAD_FAILED" if failed else
                 missing_reason if not job else "ASSET_STILL_MISSING")
             excluded.append({"scenario": name, "reason": reason})
     return ready, excluded
@@ -347,6 +365,7 @@ def check(args):
     large = args.large_scenarios or ("ask" if interactive and args.scenarios is None else "skip")
     selection = choose(explicit=list(BUILTIN) if guided_full else parse_scenarios(args.scenarios), large=large, interactive=interactive, ask=yes, say=say,
                        accept_download=args.accept_download,
+                       accept_model_download=args.accept_model_download,
                        downloader=make_downloader(config, args.asset_release_url, args.offline), probes_only=args.probes_only)
     selection["large_mode"] = large
     if guided_full:
@@ -783,11 +802,15 @@ def assets_command(args):
         if ps["installed"]:
             say("已安装，无需下载。")
             return 0
-        if not (args.accept_download or yes("下载并校验该资产包？")):
+        consent = args.accept_model_download if args.pack == 'language' else args.accept_download
+        if not (consent or yes("下载并校验 Qwen3.5-4B 模型？" if args.pack == 'language' else "从原始仓库下载并校验数据？")):
             say("未下载。")
             return 2
         downloader = make_downloader(config, args.asset_release_url, False)
-        downloader(args.pack, m)
+        if args.pack == 'language':
+            downloader(args.pack, m, model_consent=True)
+        else:
+            downloader(args.pack, m)
         return 0
     return 2
 

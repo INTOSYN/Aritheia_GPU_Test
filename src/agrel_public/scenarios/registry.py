@@ -19,9 +19,9 @@ from __future__ import annotations
 
 MLP_WIDTHS = (512, 256)
 
-# SmolLM2-135M-Instruct architecture (config.json of the pinned revision). The
-# nominal sequence lengths below are DECLARED probe shapes for the language
-# scenarios, not measured prompt lengths of a particular run.
+# Historical generic exact-probe dimensions, retained to keep the qualified
+# numerical references unchanged. They do NOT describe Qwen3.5-4B architecture
+# or certify all operations in that model. Model assets have a separate identity.
 LLM = dict(hidden=576, intermediate=1536, heads=9, kv_heads=3, head_dim=64, vocab=49152,
            seq={"short": 256, "long": 1024})
 
@@ -50,7 +50,7 @@ OPTIONAL = [n for n, s in SCENARIOS.items() if s["tier"] == "optional"]
 PACKS = {
  "singlecell": dict(scenarios=["singlecell_neighbors"], label="单细胞 PBMC3k 冻结近邻数据"),
  "literature": dict(scenarios=["biomed_rag"], label="SciFact 冻结检索表示与官方相关性"),
- "language": dict(scenarios=["llm_biomed_tables", "agent_tools"], label="SmolLM2-135M-Instruct 固定权重（两个语言场景共用）"),
+ "language": dict(scenarios=["llm_biomed_tables", "agent_tools"], label="Qwen3.5-4B 官方 BF16 权重（两个语言场景共用，须单独同意下载）"),
 }
 
 

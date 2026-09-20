@@ -7,6 +7,6 @@
   "prepared_sha256": "fa09613d1ba89355014867c9d51caa0473f8e70cb34a84daa87c1f744a4fadcf",
   "notes": [
     "Complete prompt set included, generated before GPU testing.",
-    "SmolLM2 weights downloaded separately. A wrong answer is not proof of hardware failure."
+    "Only pinned Qwen3.5-4B weights are supported, downloaded after separate explicit consent. A wrong answer is not proof of hardware failure."
   ]
 }

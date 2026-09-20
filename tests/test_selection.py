@@ -29,9 +29,9 @@ def test_interactive_asks_each_optional_scenario_default_no(quiet):
         asked.append((prompt, default)); return "单细胞" in prompt
     r = selection.choose(explicit=None, large="ask", interactive=True, ask=ask, say=quiet.append, accept_download=False)
     assert len([a for a in asked if "加入" in a[0]]) == 4 and all(a[1] is False for a in asked)
-    # singlecell was chosen; the shipped manifest is pinned but has no release URL yet -> excluded, visibly
+    # Original sources are available, but selecting a scenario does not authorize download.
     ex = {e["scenario"]: e["reason"] for e in r["excluded"]}
-    assert ex["singlecell_neighbors"] in ("ASSET_RELEASE_URL_MISSING", "ASSET_UNPINNED")
+    assert ex["singlecell_neighbors"] == 'DOWNLOAD_DECLINED'
     assert "biomed_rag" not in r["selected"] and "biomed_rag" not in ex
 
 def test_explicit_list_and_parse():

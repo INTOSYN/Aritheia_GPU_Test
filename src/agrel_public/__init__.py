@@ -6,7 +6,7 @@
 # Foundation, either version 3 of the License, or (at your option) any later
 # version. It is distributed WITHOUT ANY WARRANTY; see the LICENSE file
 # (GNU GPL v3) shipped with this package or <https://www.gnu.org/licenses/>.
-__version__ = "0.5.0rc5"
+__version__ = "0.5.0rc6"
 
 
 def _reject_legacy_core(package_dir=None):

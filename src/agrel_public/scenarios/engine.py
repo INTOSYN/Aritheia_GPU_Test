@@ -196,6 +196,7 @@ def retrieval(name: str, device: str, precision: str, batch_size: int, max_items
             "y": d["labels"][:n], "doc_labels": d["doc_labels"], "relevance": d["relevance"][:n],
             "test_mask": np.ones(n, dtype=bool)}
     detail = {"task": "retrieval", "dataset": spec["dataset"], "similarity": meta["similarity"],
+              "input_preparation": {k:meta.get(k) for k in ('preparation', 'source_url', 'source_sha256', 'versions', 'reference_kind')},
               "actual_gemm_m_k_n": shapes[:4] + (["..."] if len(shapes) > 4 else []), "batches": len(shapes),
               "dataset_sha256": chain["dataset_sha256"], "model_sha256": None, "notes": meta["notes"]}
     return data, detail

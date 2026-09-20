@@ -24,14 +24,14 @@ if [[ "$WHEEL_URL" != https://* || ! "$WHEEL_SHA256" =~ ^[0-9a-f]{64}$ ]]; then
 fi
 
 mkdir -p "$INSTALL_ROOT" "$RUN_ROOT"
-"$PYTHON_BIN" -m venv --system-site-packages "$INSTALL_ROOT/venv-rc5"
-PY="$INSTALL_ROOT/venv-rc5/bin/python"
+"$PYTHON_BIN" -m venv --system-site-packages "$INSTALL_ROOT/venv-rc6"
+PY="$INSTALL_ROOT/venv-rc6/bin/python"
 TMP_DIR="$(mktemp -d "$INSTALL_ROOT/download.XXXXXX")"
 trap 'rm -rf "$TMP_DIR"' EXIT
-CLIENT_WHEEL="$TMP_DIR/computeproof-0.5.0rc5-py3-none-any.whl"
+CLIENT_WHEEL="$TMP_DIR/computeproof-0.5.0rc6-py3-none-any.whl"
 curl --proto '=https' --tlsv1.2 --fail --location --silent --show-error "$WHEEL_URL" -o "$CLIENT_WHEEL"
 printf '%s  %s\n' "$WHEEL_SHA256" "$CLIENT_WHEEL" | sha256sum --check --status || { echo "wheel SHA-256 不一致。" >&2; exit 2; }
-"$PY" -m pip install --disable-pip-version-check "${CLIENT_WHEEL}[llm]"
+"$PY" -m pip install --disable-pip-version-check "${CLIENT_WHEEL}[llm,datasets]"
 "$PY" -c 'import torch; assert torch.cuda.is_available(), "现有环境的 CUDA PyTorch 不可用；请按 pytorch.org 选择器修复后重试"'
 "$PY" -m computeproof doctor || { echo "预检查未完成；请检查 doctor 输出后再开始检测。" >&2; exit 2; }
 

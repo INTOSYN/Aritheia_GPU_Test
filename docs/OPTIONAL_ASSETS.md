@@ -1,44 +1,39 @@
-# 轻量安装与按需资产
+# 原始仓库与按需下载
 
-`pip install` 得到程序、冻结精确参考和八个内置场景的冻结数据/模型（体积见 [DATA_SIZES](DATA_SIZES.md)）。四个可选场景的大资产独立放在发布地址，不进入 Git 源码历史。
+八个内置场景直接随源码提供。四个可选场景使用三份共享资源，不需要本项目发布数据 ZIP：
 
-## 测试前选择
+| 资源 | 原始地址 | 下载体积 | 处理 |
+|---|---|---:|---|
+| PBMC3k processed | [Scanpy 官方列出的 CZI 数据源](https://raw.githubusercontent.com/chanzuckerberg/cellxgene/main/example-dataset/pbmc3k.h5ad) | 24.7 MB | 读取 2638 × 1838 表达矩阵、归一化 |
+| SciFact | [BEIR 原始仓库](https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/scifact.zip) | 2.8 MB | 官方 test qrels、TF-IDF、512 维 LSA |
+| Qwen3.5-4B | [Qwen 官方仓库](https://huggingface.co/Qwen/Qwen3.5-4B) | 约 9.35 GB | 两个语言场景共用；只接受清单中的固定版本与文件摘要 |
 
-推荐新用户使用 `guided`：交互模式显示 10 秒可取消倒计时，后台下载三个已校验包，八个内置场景先计算，随后同次会话继续四个就绪场景。两个语言场景共用一次下载。已有资产直接复用，不重复运行内置场景。无人值守仍需 `--accept-download`；没有正式地址则不启动下载。缺依赖不自动修改用户 Python 环境，先安装 `.[llm]`；一键安装脚本在自己的环境内包含该依赖组。
+下载地址、版本、文件长度、SHA-256 和许可保存在 `assets/optional_assets.json`。PBMC3k 摘要与 Scanpy 的官方数据注册表一致。两个模型权重分片及随包任务输入的 SHA-256 与已有 Qwen3.5-4B 实验记录一致；这不是新客户端在全部平台已通过实卡测试的声明。
 
-交互终端运行 `check` 时，先列出本次内置场景，再逐项询问是否加入四个可选场景（默认否）。选中且资产缺失时，显示资产包名称、实际体积、许可与"SHA-256 已钉住"，再单独确认下载。拒绝下载时该场景记为 `DOWNLOAD_DECLINED`，不会启动缺数据的检测，也不会偷偷删除已选场景。
+## 同意规则
 
-脚本默认运行八个内置场景，不等待交互；也可以显式选择：
-
-```bash
-# 只运行内置场景
-python -m computeproof check --large-scenarios skip --out runs/light
-# 只运行一个可选场景；仅在资产缺失且授权后下载
-python -m computeproof check --scenarios biomed_rag --accept-download \
-    --asset-release-url https://github.com/OWNER/REPO/releases/download/TAG --out runs/retrieval
-# 全部十二个场景
-python -m computeproof check --large-scenarios include --accept-download \
-    --asset-release-url https://github.com/OWNER/REPO/releases/download/TAG --out runs/full
-# 只下载，不检测
-python -m computeproof assets download language --asset-release-url https://... --accept-download
-```
-
-`--accept-download` 只授权所选场景缺失的资产，不授权任何上传。发布地址也可写入配置 `asset_release_url` 或环境变量 `AGREL_ASSET_RELEASE_URL`；只接受 HTTPS。OWNER/REPO/TAG 是待配置的真实地址，源码不包含虚构或未经核验的公共地址。
-
-## 下载与复用
-
-仅使用 Python 标准库。ZIP 先写入资产根目录内的临时目录，核对声明大小、整包 SHA-256、成员列表、每个成员的大小与 SHA-256，全部通过后才移入 `~/.aritheia/assets`（或 `ARITHEIA_ASSETS`）。失败清理临时目录；已存在且内容相同的文件跳过，内容不同的文件绝不覆盖（需另选资产根）。成员路径只允许 `data/prepared/...` 与 `models/...`，拒绝 `..` 与绝对路径。两个语言场景只下载一次共享包。
-
-**清单未钉住或没有发布地址时拒绝下载。** 随包 `assets/optional_assets.json` 已钉住三个包（singlecell 35.2 MB、literature 10.5 MB、language 214.8 MB）的 ZIP 与逐成员 SHA-256；`release_url` 在维护者上传到正式 Release 前为 `null`，用户此时看到 `ASSET_RELEASE_URL_MISSING`，不会发起任何网络请求。literature 包只含运行所需的 `data.npz` + `metadata.json`，不含重做准备才需要的 LSA 变换文件。
-
-## 从 ZIP 离线安装
-
-显式运行以下命令，与在线下载使用相同的整包、成员和逐文件摘要核验。不会联网，也不会覆盖不同内容的已有资产。
+- `guided` 的 10 秒倒计时只用于 PBMC3k 与 SciFact，输入 c 可取消。
+- LLM 下载必须另外回答“是”，默认拒绝。无人值守需单独的 `--accept-model-download`。
+- `--accept-download`、选择全部场景、同意上传均不构成模型下载同意。
+- `--offline` 禁止网络；即使带有同意参数也不会下载。已安装且通过校验的资产可以复用。
+- 下载同意不授权结果上传或私有深度诊断。
 
 ```bash
-python -m computeproof assets install language /path/to/language.asset.zip
-python -m computeproof assets install singlecell /path/to/singlecell.asset.zip
-python -m computeproof assets install literature /path/to/literature.asset.zip
+python -m pip install '.[llm,datasets]'
+# 两个数据场景，不下载 LLM
+python -m computeproof check --scenarios singlecell_neighbors,biomed_rag --accept-download
+# 只下载官方模型，不启动 GPU 检测
+python -m computeproof assets download language --accept-model-download
+# 全部场景，需要两项独立授权
+python -m computeproof check --scenarios all --accept-download --accept-model-download
 ```
 
-只运行 `check --probes-only --scenarios all` 不需要这些包。语言包含 Apache 2.0 许可证全文；两个语言场景共用这份模型。显式请求的应用缺少包时，整次应用计划为未完成，已完成的探针结果仍可查看。
+下载先写到资产目录内的临时目录；验证大小和 SHA-256 后才安装。失败、中止不会留下可被误认为完整模型的目录，不覆盖不同内容的旧目录。模型推理使用 local_files_only，不会自行补下载。缺依赖、磁盘不足、显存不足或校验失败均记录为未完成，不换模型、不构造随机数据。
+
+原文件可以离线复制到 `ARITHEIA_ASSETS/models/qwen3.5-4b/`，保留官方文件名，随后程序逐文件校验。其他模型或 adapter 被拒绝。历史小模型 ZIP 不再支持。旧的 singlecell / literature ZIP 仍可用 `assets install` 离线核验导入，但不再是默认在线下载方式。
+
+## 预处理与数值解释
+
+PBMC3k 和 SciFact 在用户主机做数据准备，GPU 执行检索矩阵计算。SciFact 的 SVD 与归一化可随 NumPy、SciPy、BLAS 和 scikit-learn 版本产生差异，因此保存输入摘要、原文件摘要、处理方法和依赖版本；不把这些输入冒充归档特征的逐位相同副本，也不使用旧任务分数直接判 GPU 故障。算术判断仍来自独立的精确探针。
+
+模型文件完整性与模型输出数值校验是不同层次。Qwen3.5-4B 使用 BF16、关闭 thinking、eager attention 和无 KV cache 的 A/B/C/D 评分；任何选项出现 NaN/Inf 的题目不生成有效选择。历史 68 项精确探针的数值参考不变，其语言相关形状是通用工作负载，不能声称覆盖 Qwen3.5-4B 的所有算子。

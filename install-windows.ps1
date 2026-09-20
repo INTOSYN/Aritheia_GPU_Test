@@ -36,7 +36,7 @@ if ($WheelUrl) {
 }
 
 New-Item -ItemType Directory -Force -Path $InstallRoot | Out-Null
-$Venv = Join-Path $InstallRoot "venv-rc5"
+$Venv = Join-Path $InstallRoot "venv-rc6"
 Invoke-CheckedPython $Python @("-m", "venv", "--system-site-packages", $Venv)
 $ClientPython = Join-Path $Venv "Scripts/python.exe"
 $TempDirectory = $null
@@ -44,13 +44,13 @@ try {
     if ($WheelUrl) {
         $TempDirectory = Join-Path $InstallRoot ("download-" + [Guid]::NewGuid().ToString("N"))
         New-Item -ItemType Directory -Path $TempDirectory | Out-Null
-        $Wheel = Join-Path $TempDirectory "computeproof-0.5.0rc5-py3-none-any.whl"
+        $Wheel = Join-Path $TempDirectory "computeproof-0.5.0rc6-py3-none-any.whl"
         Invoke-WebRequest -Uri $WheelUrl -OutFile $Wheel -UseBasicParsing
         $ActualHash = (Get-FileHash -LiteralPath $Wheel -Algorithm SHA256).Hash
         if ($ActualHash -ne $WheelSha256) { throw "Wheel SHA-256 mismatch; refusing installation." }
-        $InstallTarget = "${Wheel}[llm]"
+        $InstallTarget = "${Wheel}[llm,datasets]"
     } else {
-        $InstallTarget = "${SourcePath}[llm]"
+        $InstallTarget = "${SourcePath}[llm,datasets]"
     }
     Invoke-CheckedPython $ClientPython @("-m", "pip", "install", "--disable-pip-version-check", $InstallTarget)
     Invoke-CheckedPython $ClientPython @("-c", "import agrel_public,torch; assert torch.cuda.is_available(); print('ComputeProof', agrel_public.__version__)")

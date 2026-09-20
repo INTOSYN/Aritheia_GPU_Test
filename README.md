@@ -1,6 +1,6 @@
 # Aritheia — GPU Numerical Reliability Test
 
-Aritheia 是本工具的公开名称；当前 Python 包及命令入口保留 `computeproof`，版本为 0.5.0rc5。
+Aritheia 是本工具的公开名称；当前 Python 包及命令入口保留 `computeproof`，版本为 0.5.0rc6。
 
 本公开版本使用 `~/.aritheia` 保存配置和缓存，可通过 `ARITHEIA_HOME` 和 `ARITHEIA_ASSETS` 指定目录。旧安装的配置不会自动迁移。默认研究摘要和详细记录仍使用现有 `computeproof.summary.v3` / `computeproof.detail.v2` 协议；自行配置的旧式 `/v1` 接收服务及签名包需支持新的 `aritheia.*` 格式标识，不能直接假定兼容。
 
@@ -36,7 +36,7 @@ Aritheia 是本工具的公开名称；当前 Python 包及命令入口保留 `c
 ```bash
 git clone https://github.com/INTOSYN/Aritheia_GPU_Test.git
 cd Aritheia_GPU_Test
-python -m pip install '.[llm]'
+python -m pip install '.[llm,datasets]'
 python -m computeproof doctor
 python -m computeproof guided --device cuda:0
 ```
@@ -62,7 +62,7 @@ Windows 需要 64 位 Python ≥3.10、NVIDIA 驱动和可用的 CUDA PyTorch �
 ```powershell
 nvidia-smi
 python -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available())"
-python -m pip install ".[llm]"
+python -m pip install ".[llm,datasets]"
 python -m computeproof doctor
 python -m computeproof check --device cuda:0 --out .\runs\windows-card-001
 Start-Process .\runs\windows-card-001\report.html
@@ -105,12 +105,14 @@ python -m computeproof check --devices cuda:0,cuda:1 --out runs/two-cards
 | 基因组序列分类 | 剪接位点识别 | 3,190 条序列 | 内置 |
 | 医疗影像分类 | 智能医疗影像研究 | BreastMNIST 780 张图 | 内置 |
 | 材料性能预测 | 超导材料筛选 | 21,263 条材料记录 | 内置 |
-| 单细胞图谱分析 | 单细胞组学 | 2,638 个细胞 | 可选包约 35.2 MB |
-| 生物医学知识检索 | 医学文献检索与 RAG | 5,183 文档、300 查询 | 可选包约 10.5 MB |
-| 大语言模型结构化信息理解 | 科学信息抽取 | 32 个固定任务 | 共用语言包约 214.8 MB |
+| 单细胞图谱分析 | 单细胞组学 | 2,638 个细胞 | 原始仓库约 24.7 MB，下载后预处理 |
+| 生物医学知识检索 | 医学文献检索与 RAG | 5,183 文档、300 查询 | BEIR 原始仓库约 2.8 MB，下载后预处理 |
+| 大语言模型结构化信息理解 | 科学信息抽取 | 32 个固定任务 | Qwen 官方 Qwen3.5-4B，约 9.35 GB，单独同意后下载 |
 | 大语言模型智能体决策 | 工具选择与任务决策 | 32 个固定任务 | 同上，仅下载一次 |
 
-每个场景有两档预设配置。基础仓库不下载三个大包；交互式 `guided` 会显示可取消的 10 秒倒计时，随后后台下载并运行八个内置场景，下载就绪后在同一次运行中继续四个可选场景。无人值守时只有显式加入 `--accept-download` 才下载。语言场景所需依赖由上述 `.[llm]` 安装，一键安装脚本也包含这些依赖；全程使用本地模型，不调用外部模型服务或执行工具。取消、缺资产、缺依赖、下载失败分别记录，不能把八场景完成写成十二场景通过。
+每个场景有两档预设配置。四个可选场景直接使用原始数据或模型仓库，不依赖本项目 Release 数据包。交互式 `guided` 的可取消 10 秒倒计时只授权 PBMC3k 与 SciFact 数据下载；Qwen3.5-4B 另行询问，默认拒绝，沉默或超时不视为同意。无人值守使用 `--accept-download` 授权数据下载，另用 `--accept-model-download` 授权模型下载；前者绝不包含后者。两个语言场景只支持官方未量化 Qwen3.5-4B 的固定版本，以 BF16、关闭 thinking、eager attention、无 KV cache 进行选项评分；不支持其他模型、量化版或 adapter，不会偷偷换成小模型。下载完成后同一次运行继续相应场景，拒绝下载不会阻止其他场景。已存在且通过校验的模型可离线复用。
+
+安装 `.[llm,datasets]` 提供 Transformers、单细胞读取和检索预处理依赖；安装依赖不下载模型。约 9.35 GB 是模型文件下载大小，不是显存需求。显存不足或不支持 BF16 时如实记录未完成。数据预处理的版本和输入摘要会保存；不同环境重新生成的特征不能当作旧实验的逐位参考。任务分数不用于直接认定 GPU 故障。
 
 十二个独立文件夹与运行方式见 [源码入口表](docs/OPEN_SOURCE_BOUNDARY.md)。例如只运行公开场景、不联网也不上传：
 
@@ -118,7 +120,7 @@ python -m computeproof check --devices cuda:0,cuda:1 --out runs/two-cards
 python -m agrel_public.scenarios.drug_screen --device cuda:0 --out runs/drug-only
 ```
 
-这个独立入口仅执行场景，不代替整套精确探针；缺失可选资产需先安装。正式 Release 地址未配置前，可用显式地址或离线 ZIP 安装，不能自动下载占位地址。
+这个独立入口仅执行场景，不代替整套精确探针；缺失可选资产需先下载，推理本身不联网。
 
 ```bash
 # 八个内置应用及其探针
@@ -126,8 +128,7 @@ python -m computeproof check --large-scenarios skip --out runs/light
 # 12 个场景的精确探针，不需要可选大包
 python -m computeproof check --scenarios all --probes-only --out runs/probes
 # 经授权下载资产并运行全部场景
-python -m computeproof check --scenarios all --accept-download \
-  --asset-release-url https://github.com/OWNER/REPO/releases/download/TAG --out runs/full
+python -m computeproof check --scenarios all --accept-download --accept-model-download --out runs/full
 ```
 
 各场景的科学问题、具体算法和解释边界见 [SCENARIOS](docs/SCENARIOS.md)，文件体积见 [DATA_SIZES](docs/DATA_SIZES.md)，可选包规则见 [OPTIONAL_ASSETS](docs/OPTIONAL_ASSETS.md)。

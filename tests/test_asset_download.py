@@ -65,11 +65,13 @@ def test_unpinned_manifest_refuses(served, tmp_path):
     with pytest.raises(ValueError, match="pinned"):
         assets.download_pack("singlecell", Transport(2, True), manifest=bad, dest_root=tmp_path)
 
-def test_shipped_manifest_is_pinned_and_awaits_release_url():
+def test_shipped_manifest_is_pinned_and_uses_original_sources():
     m = assets.optional_manifest()
     assert set(m["packs"]) == {"singlecell","literature","language"}
     assert all(assets.pack_status(p, m)["pinned"] for p in m["packs"])
-    assert len(m["packs"]["language"]["members"]) == 11
+    assert len(m["packs"]["language"]["members"]) == 12
+    assert m['packs']['language']['model'] == 'Qwen/Qwen3.5-4B'
+    assert all(assets.pack_status(p, m)['release_url'].startswith('https://') for p in m['packs'])
     assert all(mem["path"].startswith(("data/prepared/", "models/")) for p in m["packs"].values() for mem in p["members"])
     # publish step: release_url is filled only after the ZIPs are uploaded; until then no download is attempted
     assert m["release_url"] is None or m["release_url"].startswith("https://")

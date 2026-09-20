@@ -43,7 +43,7 @@ def test_installers_do_not_require_private_core_or_rename_python_abi():
     for text in (linux, windows):
         assert "CORE_WHEEL" not in text
         assert "cp312-cp312" not in text
-        assert "venv-rc5" in text
+        assert "venv-rc6" in text
         assert "py3-none-any.whl" in text
     assert "Get-FileHash" in windows
     assert "[switch]$Run" in windows

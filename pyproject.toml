@@ -3,7 +3,7 @@ requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 [project]
 name = "computeproof"
-version = "0.5.0rc5"
+version = "0.5.0rc6"
 description = "Single or multi-GPU scientific reliability checks with offline mode and disclosed research summaries"
 readme = "README.md"
 license = "GPL-3.0-or-later"
@@ -13,7 +13,8 @@ dependencies = ["cryptography>=41", "numpy>=1.24"]
 classifiers = ["Programming Language :: Python :: 3", "Topic :: Scientific/Engineering", "Environment :: GPU :: NVIDIA CUDA"]
 [project.optional-dependencies]
 test = ["pytest>=8"]
-llm = ["transformers>=4.40", "safetensors>=0.4", "tokenizers>=0.19", "huggingface-hub>=0.23"]
+llm = ["transformers>=5.2", "safetensors>=0.4", "tokenizers>=0.22", "huggingface-hub>=1.0"]
+datasets = ["anndata>=0.10", "scipy>=1.11", "scikit-learn>=1.3"]
 [project.scripts]
 computeproof = "agrel_public.cli:main"
 aritheia = "agrel_public.cli:main"

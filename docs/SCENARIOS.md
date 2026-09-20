@@ -2,7 +2,7 @@
 
 显卡不崩溃、训练能收敛、分数甚至更好，都不足以单独证明计算正确。ComputeProof 把这个问题放进 12 个可以实际运行的小项目：从分子排行榜到语言模型的工具选择，观察数值变化怎样抵达应用结果。场景在 BF16 自动混合精度下运行（累加、loss、softmax、优化器状态和输出处理为 FP32）；场景指标、非有限值检查和精确探针分别报告，不把"应用成绩下降"和"硬件故障"画等号。
 
-每个场景两档冻结配置。批量场景：batch 8 与 512/1536；语言场景：short 与 long 上下文。配置决定代表性精确探针的 GEMM 形状：MLP 场景为 `[b,nin]×[nin,512]`、`[b,512]×[512,256]`、`[b,256]×[256,nout]`；检索场景为 `[b,dim]×[dim,docs]`；语言场景按 SmolLM2-135M 的 hidden 576 / intermediate 1536 / 9 头 × 64 维 / 词表 49,152 与声明的名义序列长度 256 / 1024 生成，包括一个 `bmm` 注意力探针。这些是代表性形状，不保证与实际 token 长度、尾批次或融合路径一一对应。旧记录中读表提示约 281/1361 token，智能体约 179–185/1331–1337 token；实际长度随输出 detail 记录。
+每个场景两档冻结配置。批量场景：batch 8 与 512/1536；语言场景：short 与 long 上下文。配置决定代表性精确探针的 GEMM 形状：MLP 场景为 `[b,nin]×[nin,512]`、`[b,512]×[512,256]`、`[b,256]×[256,nout]`；检索场景为 `[b,dim]×[dim,docs]`；语言场景保留历史通用精确探针：维度 576 / 1536 / 9 × 64 / 49,152、名义长度 256 / 1024，包括一个 `bmm`。这些探针不表示 Qwen3.5-4B 的网络结构，也不证明其全部路径正确。这些是代表性形状，不保证与实际 token 长度、尾批次或融合路径一一对应。旧记录中读表提示约 281/1361 token，智能体约 179–185/1331–1337 token；实际长度随输出 detail 记录。
 
 ## 可用性分层
 
@@ -10,7 +10,7 @@
 |---|---|---|
 | 随包 `bundled` | drug_screen, drug_finetune, molecule_neighbors, cytology, ocr_cache | 冻结数据 + 模型已在 wheel 内（约 6 MB），来自 Aritheia 0.3.0 归档，SHA-256 记录在 `assets/scenarios/ASSET_MANIFEST.json` |
 | 内置 `frozen_asset` | genomics_splice, medical_ultrasound, materials_screen | 与 0.3.5 相同的内置场景；冻结数据/模型已从参考环境导入并随 wheel 发布（公开副本去除了准备/训练设备标识）。若缺失则报告 `FROZEN_ASSET_MISSING`，不会用合成数据或重新训练替代 |
-| 可选 `optional` | singlecell_neighbors, biomed_rag, llm_biomed_tables, agent_tools | 三个资产包（单细胞、文献、语言模型；两个语言场景共用一个），逐项询问，显示体积与许可后单独确认下载 |
+| 可选 `optional` | singlecell_neighbors, biomed_rag, llm_biomed_tables, agent_tools | 从 PBMC3k、BEIR、Qwen 原始仓库下载；模型下载必须单独明确同意 |
 
 未就绪的场景不会启动，也不会被悄悄删掉：`report.json` 的 `selection.excluded` 列出每个未运行场景及原因。
 
@@ -36,7 +36,7 @@
 
 **生物医学知识检索（biomed_rag）** 使用 SciFact 5,183 篇文档、300 个查询、官方相关性标注和 512 维表示，只测 RAG 的检索环节。它同时比较汇总 Recall 与具体证据列表，避免汇总指标掩盖个别检索结果的变化。
 
-**大语言模型结构化信息理解（llm_biomed_tables）与智能体决策（agent_tools）** 各有 32 个冻结任务，使用同一 SmolLM2-135M-Instruct 固定 revision 做受约束的 A/B/C/D 选择；不执行外部工具，需要 `transformers`（`pip install '.[llm]'`）。工具同时观察选择、分数和非有限值；小模型的结果不能包装成可靠医学助手或生产 Agent 的性能结论。
+**大语言模型结构化信息理解（llm_biomed_tables）与智能体决策（agent_tools）** 各有 32 个冻结任务，使用同一官方 Qwen3.5-4B 固定 revision，以 BF16、关闭 thinking、eager attention、无 KV cache 做受约束的 A/B/C/D 选择；不执行外部工具，需要 `transformers`（`pip install '.[llm]'`）。工具同时观察选择、分数和非有限值；选项评分不能包装成可靠医学助手或生产 Agent 的性能结论；任何选项出现 NaN/Inf 的题目不产生有效选择。
 
 ## 资产体积
 
@@ -44,11 +44,11 @@
 |---|---:|---:|
 | 随包八场景合计 | 约 6.1 | 约 9.1 |
 | genomics_splice / medical_ultrasound / materials_screen | 0.15 / 0.73 / 4.41 | 0.95 / 1.98 / 0.65 |
-| singlecell（pbmc3k） | 35.2 | — |
-| literature（scifact，运行所需 data.npz） | 10.5 | — |
-| language（SmolLM2-135M，ZIP 214.8） | 0.35（随包输入） | 272.4 解压后 |
+| singlecell（PBMC3k 原文件） | 24.7 | — |
+| literature（SciFact 原 ZIP） | 2.8 | — |
+| language（Qwen3.5-4B 官方文件） | 0.35（随包输入） | 9342.8 |
 
-MB = 1,000,000 字节；0.3.x 实测的冻结资产文件字节，不是上游原始数据集体积。
+MB = 1,000,000 字节；可选项列出原始下载体积，不等于显存需求。PBMC3k / SciFact 下载后在本地预处理，处理版本与输入摘要随报告保存。
 
 ## 怎样把它做成自己的项目
 

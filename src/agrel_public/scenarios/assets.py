@@ -27,7 +27,7 @@ from ..common import config_home, load_json, save_json, sha256_file, strict_keys
 from .registry import PACKS, SCENARIOS, scenario
 
 PACKAGE_ASSETS = Path(__file__).resolve().parent.parent / "assets" / "scenarios"
-LLM_DIR = "models/smollm2-135m"
+LLM_DIR = "models/qwen3.5-4b"
 
 
 def user_root() -> Path:
@@ -42,7 +42,7 @@ def required_files(name: str) -> list[str]:
     s = scenario(name)
     d = s["dataset"]
     if s["kind"] == "llm":
-        return [f"data/prepared/{d}/prompts.json", f"data/prepared/{d}/metadata.json", f"{LLM_DIR}/manifest.json"]
+        return [f"data/prepared/{d}/prompts.json", f"data/prepared/{d}/metadata.json", f"{LLM_DIR}/config.json"]
     files = [f"data/prepared/{d}/data.npz", f"data/prepared/{d}/metadata.json"]
     if s["kind"] in ("supervised", "train", "cache"):
         files += [f"models/{d}/weights.npz", f"models/{d}/training_report.json"]
@@ -74,6 +74,9 @@ def status(name: str) -> dict:
 
 
 def verify_required_hashes(name):
+    from .upstream import verify_prepared
+    if scenario(name)['kind'] == 'retrieval' and scenario(name)['tier'] == 'optional' and verify_prepared(name):
+        return
     entries=dict(load_json(MANIFEST)['files'])
     s=scenario(name)
     if s['tier']=='optional':
@@ -85,23 +88,9 @@ def verify_required_hashes(name):
 
 
 def verify_llm_chain():
-    manifest_path=locate(f'{LLM_DIR}/manifest.json')
-    m=load_json(manifest_path)
-    files=m.get('sha256', {})
-    if not any(k.endswith('.safetensors') for k in files) or 'config.json' not in files:
-        raise ValueError('Model manifest has no weights/config')
-    for name, sha in files.items():
-        if Path(name).name != name or name in ('.','..'):
-            raise ValueError('Unsafe model member')
-        p=manifest_path.parent/name
-        if not p.is_file() or sha256_file(p)!=sha:
-            raise ValueError('Missing or changed model member: '+name)
-    # The publisher-pinned pack manifest, not an editable local manifest, binds all weights.
-    pack=optional_manifest()['packs']['language']
-    for entry in pack['members']:
-        p=locate(entry['path'])
-        if p is None or p.stat().st_size!=entry['bytes'] or sha256_file(p)!=entry['sha256']:
-            raise ValueError('Model pack integrity mismatch: '+entry['path'])
+    from .llm import model_dir, verify_model
+    # The shipped manifest, not an editable local manifest, binds every model file.
+    verify_model(model_dir())
     return True
 
 
@@ -172,9 +161,9 @@ def optional_manifest(path: Path | None = None) -> dict:
     for name, pack in m["packs"].items():
         if name not in PACKS:
             raise ValueError("Unknown optional pack " + name)
-        strict_keys(pack, {"file", "bytes", "sha256", "members", "approx_bytes", "license"})
+        strict_keys(pack, {"file", "bytes", "sha256", "members", "approx_bytes", "license"}, {"upstream", "model", "revision"})
         for member in pack["members"]:
-            strict_keys(member, {"path", "bytes", "sha256"})
+            strict_keys(member, {"path", "bytes", "sha256"}, {"url"})
             if not SAFE_MEMBER.match(member["path"]) or ".." in member["path"].split("/"):
                 raise ValueError("Unsafe member path in optional manifest")
     return m
@@ -182,6 +171,11 @@ def optional_manifest(path: Path | None = None) -> dict:
 
 def pack_pinned(pack: dict) -> bool:
     ok = lambda h: isinstance(h, str) and re.fullmatch(r"[0-9a-f]{64}", h) is not None
+    if pack.get('upstream'):
+        e = pack['upstream']
+        return ok(e.get('sha256')) and isinstance(e.get('bytes'), int) and e['bytes'] > 0
+    if pack.get('model'):
+        return pack['model'] == 'Qwen/Qwen3.5-4B' and bool(pack['members']) and all(ok(e['sha256']) and e['bytes'] > 0 and e.get('url', '').startswith('https://huggingface.co/Qwen/Qwen3.5-4B/resolve/'+pack['revision']+'/') for e in pack['members'])
     return (ok(pack["sha256"]) and isinstance(pack["bytes"], int) and pack["bytes"] > 0
             and bool(pack["members"]) and all(ok(m["sha256"]) and isinstance(m["bytes"], int) for m in pack["members"]))
 
@@ -190,9 +184,12 @@ def pack_status(pack_name: str, manifest: dict | None = None) -> dict:
     manifest = manifest or optional_manifest()
     pack = manifest["packs"][pack_name]
     present = bool(pack["members"]) and all((p := locate(m["path"])) is not None and p.stat().st_size == m["bytes"] and sha256_file(p) == m["sha256"] for m in pack["members"])
+    if not present and pack.get('upstream'):
+        from .upstream import verify_prepared
+        present = all(verify_prepared(name) for name in PACKS[pack_name]['scenarios'])
     return dict(pack=pack_name, label=PACKS[pack_name]["label"], scenarios=PACKS[pack_name]["scenarios"],
-                installed=present, pinned=pack_pinned(pack), bytes=pack["bytes"] or pack["approx_bytes"],
-                release_url=manifest["release_url"], file=pack["file"], license=pack["license"])
+                installed=present, pinned=pack_pinned(pack), bytes=pack.get('upstream', {}).get('bytes') or pack["bytes"] or pack["approx_bytes"],
+                release_url=pack.get('upstream', {}).get('url') or ('https://huggingface.co/'+pack['model'] if pack.get('model') else manifest["release_url"]), file=pack["file"], license=pack["license"])
 
 
 def human_bytes(n: int | None) -> str:
@@ -207,13 +204,18 @@ def human_bytes(n: int | None) -> str:
 
 def download_pack(pack_name: str, transport, *, release_url: str | None = None,
                   manifest: dict | None = None, progress=lambda done, total: None,
-                  cancel: threading.Event | None = None, dest_root: Path | None = None) -> Path:
+                  cancel: threading.Event | None = None, dest_root: Path | None = None, model_consent=False) -> Path:
     """Download ONE optional pack after explicit consent. Verify ZIP size, SHA-256,
     member list and each member's SHA-256 before anything reaches the asset root."""
     manifest = manifest or optional_manifest()
     pack = manifest["packs"][pack_name]
+    if pack_name == 'language' and not model_consent:
+        raise PermissionError('Qwen3.5-4B model download requires separate explicit consent')
     if not pack_pinned(pack):
         raise ValueError("Optional pack digest is not pinned by the publisher; refusing to download unverifiable data")
+    if pack.get('upstream') or pack.get('model'):
+        from .upstream import download
+        return download(pack_name, pack, transport, cancel=cancel, progress=progress, dest_root=dest_root)
     base = (release_url or manifest["release_url"] or "").rstrip("/")
     if not base:
         raise ValueError("No asset release URL configured (config asset_release_url or AGREL_ASSET_RELEASE_URL)")
@@ -303,6 +305,10 @@ def import_tree(source: Path, names: list[str], dest_root: Path | None = None) -
 def install_pack(pack_name: str, archive: Path, *, dest_root=None):
     """Explicit local ZIP installation, using the identical pinned download verifier."""
     archive=Path(archive).resolve()
+    if pack_name == 'language':
+        raise ValueError('Only the pinned Qwen3.5-4B original files are supported; legacy language ZIPs are not accepted')
     class LocalArchive:
         def open(self,url):return archive.open('rb')
-    return download_pack(pack_name,LocalArchive(),release_url='local://archive',dest_root=dest_root)
+    manifest = optional_manifest()
+    manifest['packs'][pack_name].pop('upstream', None)
+    return download_pack(pack_name,LocalArchive(),release_url='local://archive',dest_root=dest_root,manifest=manifest)

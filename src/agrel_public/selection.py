@@ -33,7 +33,7 @@ def parse_scenarios(text: str | None) -> list[str] | None:
 
 
 def choose(*, explicit: list[str] | None, large: str, interactive: bool, ask, say,
-           accept_download: bool, downloader=None, probes_only=False) -> dict:
+           accept_download: bool, downloader=None, probes_only=False, accept_model_download=False) -> dict:
     """Return {'selected': [...], 'excluded': [{scenario, reason}], 'downloaded': [...]}."""
     if explicit is not None:
         wanted = list(explicit)
@@ -92,7 +92,8 @@ def choose(*, explicit: list[str] | None, large: str, interactive: bool, ask, sa
             continue
         say(f"『{spec['title']}』需要资产包 {pack}（{ps['label']}），约 {assets.human_bytes(ps['bytes'])}，"
             f"SHA-256 已钉住；许可：{ps['license']}")
-        agreed = accept_download or (interactive and ask("  现在下载并校验该资产包？", default=False))
+        granted = accept_model_download if pack == 'language' else accept_download
+        agreed = granted or (interactive and ask("  单独同意下载 Qwen3.5-4B 模型（约 9.35 GB）？" if pack == 'language' else "  现在从原始仓库下载并校验数据？", default=False))
         if not agreed:
             wanted.remove(name)
             excluded.append(dict(scenario=name, reason="DOWNLOAD_DECLINED", pack=pack))
@@ -102,7 +103,10 @@ def choose(*, explicit: list[str] | None, large: str, interactive: bool, ask, sa
             excluded.append(dict(scenario=name, reason="DOWNLOAD_UNAVAILABLE", pack=pack, detail="offline run"))
             continue
         try:
-            downloader(pack, manifest)
+            if pack == 'language':
+                downloader(pack, manifest, model_consent=True)
+            else:
+                downloader(pack, manifest)
             downloaded.append(pack)
         except Exception as e:
             wanted.remove(name)

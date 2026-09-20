@@ -8,6 +8,6 @@ scikit-learn数据接口/软件：BSD-3-Clause，原软件COPYING已附。Breast
 
 以下提供经过处理的冻结数据；前三种为可选包，UCI splice、superconductivity 与 BreastMNIST 随基础包发布：PBMC来自10x健康供者数据，依10x公开数据CC BY4.0和Scanpy处理版本归属；BEIR SciFact数据卡为CC BY-SA4.0；UCI splice和superconductivity仓库提供CC BY4.0；BreastMNIST依MedMNIST/BUSI的数据归属和CC BY4.0。完整论文/原作者说明以数据卡为准。使用不等于临床许可。
 
-SmolLM2-135M-Instruct下载模型：Apache2.0，语言资产包附完整 LICENSE、模型 README、固定 revision 及逐文件摘要。模型版权不由本工具重新授权。未随包提供任何字体文件。
+Qwen3.5-4B 下载模型：Apache-2.0，直接从 Qwen 官方仓库取得固定 revision 的文件，包含 LICENSE；逐文件摘要见可选资产清单。模型版权不由本工具重新授权。未随包提供任何字体文件。
 
 新编写的32条读表和32条工具路由模板为本工具fixture；底层Act记录仍保留其数据来源义务。处理NPZ是本工具生成，不能因此抹除底层数据的许可。基线权重仅供研究，正式商业/公共发布前审核训练数据相应条款。
