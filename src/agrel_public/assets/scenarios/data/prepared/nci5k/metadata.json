@@ -1,0 +1,15 @@
+{
+  "dataset": "nci5k",
+  "task": "retrieval",
+  "similarity": "tanimoto",
+  "rows": 4991,
+  "queries": 1536,
+  "features": 2048,
+  "prepared_sha256": "b81c168ea88422caf70bf8fe7c96df27b2cf3503f9b32e409bd758954ab56f4b",
+  "synthetic": false,
+  "notes": [
+    "Complete first_5K.smi raw snapshot included; invalid SMILES explicitly excluded.",
+    "1536 fixed, non-repeated query records selected before any GPU measurements.",
+    "Chemical structural similarity only, no activity labels and no efficacy claim."
+  ]
+}

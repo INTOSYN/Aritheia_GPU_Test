@@ -1,0 +1,12 @@
+{
+  "dataset": "agent_prompts",
+  "rows": 32,
+  "task": "classification",
+  "authored_fixture": true,
+  "synthetic_faults": false,
+  "prepared_sha256": "45961de007faa47f3695b919b9cd2638f0134aa83796d5b3835f9eb10ec0ce57",
+  "notes": [
+    "Complete prompt set included, generated before GPU testing.",
+    "SmolLM2 weights downloaded separately. A wrong answer is not proof of hardware failure."
+  ]
+}

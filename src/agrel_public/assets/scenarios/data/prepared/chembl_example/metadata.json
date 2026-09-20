@@ -1,0 +1,21 @@
+{
+  "dataset": "chembl_example",
+  "task": "regression",
+  "rows": 1017,
+  "features": 2048,
+  "split_counts": {
+    "0": 719,
+    "1": 140,
+    "2": 158
+  },
+  "split_definition": "0=train,1=validation,2=test; normalization fit on train only",
+  "prepared_sha256": "8d21f050ff4247ca40aaee1984a88ca8161e3cad3703e8adcbebd12b5ebb6c4c",
+  "created_utc": "2026-09-09T20:01:25Z",
+  "notes": [
+    "Full RDKit FreeWilson example, not full ChEMBL.",
+    "Target retains the upstream name Act; no clinical efficacy or unverified target/units claimed.",
+    "The model is a lightweight research baseline, not FreeWilson reproduction or SOTA.",
+    "Duplicate canonical structures stay in the same split."
+  ],
+  "synthetic": false
+}

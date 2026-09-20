@@ -1,0 +1,226 @@
+{
+  "dataset": "splice",
+  "training_device": "reference-gpu (raw device UUID withheld for public release)",
+  "training_precision": "fp32_TF32_off",
+  "seed": 20260910,
+  "epochs": 50,
+  "selected_epoch": 1,
+  "train_rows": 2232,
+  "val_rows": 496,
+  "test_rows": 462,
+  "dataset_sha256": "a30a555634ea7b660e6a967f8cc749d95d85113de4cdd4f5267d485f6753e2a3",
+  "weights_sha256": "856810333625a1b2c6d78a82e979dd0294106ac2e77498ac976ff71d440ba37c",
+  "history": [
+    {
+      "epoch": 0,
+      "validation_loss": 0.43311187624931335
+    },
+    {
+      "epoch": 1,
+      "validation_loss": 0.13997039198875427
+    },
+    {
+      "epoch": 2,
+      "validation_loss": 0.17913299798965454
+    },
+    {
+      "epoch": 3,
+      "validation_loss": 0.15635333955287933
+    },
+    {
+      "epoch": 4,
+      "validation_loss": 0.15938909351825714
+    },
+    {
+      "epoch": 5,
+      "validation_loss": 0.17758019268512726
+    },
+    {
+      "epoch": 6,
+      "validation_loss": 0.1804216504096985
+    },
+    {
+      "epoch": 7,
+      "validation_loss": 0.18087837100028992
+    },
+    {
+      "epoch": 8,
+      "validation_loss": 0.1886673867702484
+    },
+    {
+      "epoch": 9,
+      "validation_loss": 0.19128049910068512
+    },
+    {
+      "epoch": 10,
+      "validation_loss": 0.1958375722169876
+    },
+    {
+      "epoch": 11,
+      "validation_loss": 0.21149176359176636
+    },
+    {
+      "epoch": 12,
+      "validation_loss": 0.20630265772342682
+    },
+    {
+      "epoch": 13,
+      "validation_loss": 0.20914481580257416
+    },
+    {
+      "epoch": 14,
+      "validation_loss": 0.22946716845035553
+    },
+    {
+      "epoch": 15,
+      "validation_loss": 0.21639429032802582
+    },
+    {
+      "epoch": 16,
+      "validation_loss": 0.23719148337841034
+    },
+    {
+      "epoch": 17,
+      "validation_loss": 0.21879057586193085
+    },
+    {
+      "epoch": 18,
+      "validation_loss": 0.2351367175579071
+    },
+    {
+      "epoch": 19,
+      "validation_loss": 0.21880553662776947
+    },
+    {
+      "epoch": 20,
+      "validation_loss": 0.21975049376487732
+    },
+    {
+      "epoch": 21,
+      "validation_loss": 0.224776953458786
+    },
+    {
+      "epoch": 22,
+      "validation_loss": 0.24695777893066406
+    },
+    {
+      "epoch": 23,
+      "validation_loss": 0.2336706817150116
+    },
+    {
+      "epoch": 24,
+      "validation_loss": 0.24714332818984985
+    },
+    {
+      "epoch": 25,
+      "validation_loss": 0.23364117741584778
+    },
+    {
+      "epoch": 26,
+      "validation_loss": 0.23450109362602234
+    },
+    {
+      "epoch": 27,
+      "validation_loss": 0.23296265304088593
+    },
+    {
+      "epoch": 28,
+      "validation_loss": 0.22839023172855377
+    },
+    {
+      "epoch": 29,
+      "validation_loss": 0.22883491218090057
+    },
+    {
+      "epoch": 30,
+      "validation_loss": 0.2388313263654709
+    },
+    {
+      "epoch": 31,
+      "validation_loss": 0.24699927866458893
+    },
+    {
+      "epoch": 32,
+      "validation_loss": 0.23897801339626312
+    },
+    {
+      "epoch": 33,
+      "validation_loss": 0.23319831490516663
+    },
+    {
+      "epoch": 34,
+      "validation_loss": 0.2513340711593628
+    },
+    {
+      "epoch": 35,
+      "validation_loss": 0.2317034900188446
+    },
+    {
+      "epoch": 36,
+      "validation_loss": 0.2365850806236267
+    },
+    {
+      "epoch": 37,
+      "validation_loss": 0.23735956847667694
+    },
+    {
+      "epoch": 38,
+      "validation_loss": 0.24612146615982056
+    },
+    {
+      "epoch": 39,
+      "validation_loss": 0.23845213651657104
+    },
+    {
+      "epoch": 40,
+      "validation_loss": 0.23835529386997223
+    },
+    {
+      "epoch": 41,
+      "validation_loss": 0.23689794540405273
+    },
+    {
+      "epoch": 42,
+      "validation_loss": 0.2454061061143875
+    },
+    {
+      "epoch": 43,
+      "validation_loss": 0.23868592083454132
+    },
+    {
+      "epoch": 44,
+      "validation_loss": 0.2479904294013977
+    },
+    {
+      "epoch": 45,
+      "validation_loss": 0.24037984013557434
+    },
+    {
+      "epoch": 46,
+      "validation_loss": 0.24743832647800446
+    },
+    {
+      "epoch": 47,
+      "validation_loss": 0.2409619390964508
+    },
+    {
+      "epoch": 48,
+      "validation_loss": 0.2449796497821808
+    },
+    {
+      "epoch": 49,
+      "validation_loss": 0.2460246980190277
+    }
+  ],
+  "test_correct": 438,
+  "test_accuracy": 0.948051948051948,
+  "claim": "Healthy GPU baseline; GPU RNG differs from original CPU training. No tested faulty GPU used in fitting.",
+  "public_release_scrub": {
+    "fields": [
+      "training_device"
+    ],
+    "source_file_sha256": "6ce848c0cdf15433e7cbb3ec9c05887f67311c5b3266b79cdd986d8fda69d2be",
+    "date": "2026-09-12"
+  },
+  "original_metadata_sha256": "524f5fe8ace6a6f16d315c9e684cbea43dc6c53ae01688a3f92483f2bc5f68ae"
+}

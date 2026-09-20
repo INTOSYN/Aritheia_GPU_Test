@@ -1,0 +1,19 @@
+{
+  "dataset": "breast_cancer",
+  "task": "classification",
+  "rows": 569,
+  "features": 30,
+  "split_counts": {
+    "0": 401,
+    "1": 83,
+    "2": 85
+  },
+  "split_definition": "0=train,1=validation,2=test; normalization fit on train only",
+  "prepared_sha256": "8c7e17a6532c47aa6b070bcc6aa734fe754bb38a2bb2199e6373332048cf2fd0",
+  "created_utc": "2026-09-09T20:01:26Z",
+  "notes": [
+    "Full scikit-learn bundled dataset snapshot. Split is benchmark-specific, not an official clinical trial split.",
+    "Cytology features, not histopathology whole-slide images."
+  ],
+  "synthetic": false
+}

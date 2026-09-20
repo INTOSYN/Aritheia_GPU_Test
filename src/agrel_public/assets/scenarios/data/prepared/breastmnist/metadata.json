@@ -1,0 +1,27 @@
+{
+  "dataset": "breastmnist",
+  "task": "classification",
+  "rows": 780,
+  "features": 784,
+  "split_counts": {
+    "0": 546,
+    "1": 78,
+    "2": 156
+  },
+  "split_definition": "Official train/validation/test retained",
+  "prepared_sha256": "a2a15de59b0ecb68a90e1c24f68cef9676a20ccce03e96780d14595712b959ac",
+  "synthetic": false,
+  "prepare_device": "reference-gpu (raw device UUID withheld for public release)",
+  "notes": [
+    "Full official 28x28 BreastMNIST split; GPU image scaling /255.",
+    "0=malignant,1=normal/benign; small MLP reliability baseline, not medical deployment."
+  ],
+  "public_release_scrub": {
+    "fields": [
+      "prepare_device"
+    ],
+    "source_file_sha256": "1356438b6879b8f54d70d446d1fe81477d0a322f193c46fdbc793f1978dd221f",
+    "date": "2026-09-12"
+  },
+  "original_metadata_sha256": "ab0376859d9a5ad886885642dcff2b9deca09a92c632d7cc040bd80b62c5ce4d"
+}

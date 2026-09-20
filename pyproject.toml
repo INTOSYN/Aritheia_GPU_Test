@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "computeproof"
+version = "0.5.0rc5"
+description = "Single or multi-GPU scientific reliability checks with offline mode and disclosed research summaries"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+dependencies = ["cryptography>=41", "numpy>=1.24"]
+classifiers = ["Programming Language :: Python :: 3", "Topic :: Scientific/Engineering", "Environment :: GPU :: NVIDIA CUDA"]
+[project.optional-dependencies]
+test = ["pytest>=8"]
+llm = ["transformers>=4.40", "safetensors>=0.4", "tokenizers>=0.19", "huggingface-hub>=0.23"]
+[project.scripts]
+computeproof = "agrel_public.cli:main"
+aritheia = "agrel_public.cli:main"
+[tool.setuptools.packages.find]
+where = ["src"]
+[tool.setuptools.package-data]
+agrel_public = ["assets/*.json", "assets/*.md", "assets/native/*", "assets/native/source/*", "assets/scenarios/*.json", "assets/scenarios/licenses/*",
+                "assets/scenarios/data/prepared/*/*", "assets/scenarios/models/*/*", "scenarios/*/README.md"]
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

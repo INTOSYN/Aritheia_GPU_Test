@@ -1,0 +1,108 @@
+{
+  "schema": "aritheia.optional-assets.v1",
+  "release_url": null,
+  "packs": {
+    "singlecell": {
+      "file": "singlecell.asset.zip",
+      "bytes": 35211847,
+      "sha256": "38a27c603a9f6653338fd194ba7ef23bd73e1443231d2c9837691d0fdc967bca",
+      "approx_bytes": 35211847,
+      "license": "10x Genomics public PBMC data CC BY 4.0 via Scanpy-processed pbmc3k; not patient-level clinical data",
+      "members": [
+        {
+          "path": "data/prepared/pbmc3k/data.npz",
+          "bytes": 35218816,
+          "sha256": "b808606ca660711c1f6773167821a629f2a86799b9683df94f2342f933b42455"
+        },
+        {
+          "path": "data/prepared/pbmc3k/metadata.json",
+          "bytes": 1039,
+          "sha256": "ec8a9963dfc2466520be0f651a9712cd1acac741ca3784b91d77075442505c58"
+        }
+      ]
+    },
+    "literature": {
+      "file": "literature.asset.zip",
+      "bytes": 10452755,
+      "sha256": "42863e98691ff469e1df825ea7372e7877dfdf6bcc75698860de28160aa62c50",
+      "approx_bytes": 10452755,
+      "license": "BEIR SciFact CC BY-SA 4.0; derived retrieval features keep attribution and share-alike obligations",
+      "members": [
+        {
+          "path": "data/prepared/scifact/data.npz",
+          "bytes": 10450350,
+          "sha256": "96f62a3f98d3cfcc00d426c171a5f8229c0543c289dca3ae8cfe3871a7e85076"
+        },
+        {
+          "path": "data/prepared/scifact/metadata.json",
+          "bytes": 1046,
+          "sha256": "d84ddbaa8fbf23ffbcce1cda90152cfecee59df61dd1c6907d621228b9dc5715"
+        }
+      ]
+    },
+    "language": {
+      "file": "language.asset.zip",
+      "bytes": 214828474,
+      "sha256": "ea9336fd69604c7b314457c1e6fe78cca0035bdc57f7d7b202127fbc76402d7e",
+      "approx_bytes": 214828474,
+      "license": "SmolLM2-135M-Instruct Apache-2.0, pinned revision 12fd25f77366fa6b3b4b768ec3050bf629380bac; model README retained",
+      "members": [
+        {
+          "path": "models/smollm2-135m/LICENSE",
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        {
+          "path": "models/smollm2-135m/README.md",
+          "bytes": 6772,
+          "sha256": "4f97533ad95b1b2fea15fbc075c01b94578ebdd7c8138888fa43fa3abd530dc4"
+        },
+        {
+          "path": "models/smollm2-135m/config.json",
+          "bytes": 861,
+          "sha256": "8eb740e8bbe4cff95ea7b4588d17a2432deb16e8075bc5828ff7ba9be94d982a"
+        },
+        {
+          "path": "models/smollm2-135m/generation_config.json",
+          "bytes": 132,
+          "sha256": "87b916edaaab66b3899b9d0dd0752727dff6666686da0504d89ae0a6e055a013"
+        },
+        {
+          "path": "models/smollm2-135m/manifest.json",
+          "bytes": 1060,
+          "sha256": "cc5c67175b732c0d80a17ecb3c1ec9c17a1fc41ca952f1ad344cede06da4e202"
+        },
+        {
+          "path": "models/smollm2-135m/merges.txt",
+          "bytes": 466391,
+          "sha256": "0b54e8aa4e53d5383e2e4bc635a56b43f9647f7b13832d5d9ecd8f82dac4f510"
+        },
+        {
+          "path": "models/smollm2-135m/model.safetensors",
+          "bytes": 269060552,
+          "sha256": "5af571cbf074e6d21a03528d2330792e532ca608f24ac70a143f6b369968ab8c"
+        },
+        {
+          "path": "models/smollm2-135m/special_tokens_map.json",
+          "bytes": 655,
+          "sha256": "2b7379f3ae813529281a5c602bc5a11c1d4e0a99107aaa597fe936c1e813ca52"
+        },
+        {
+          "path": "models/smollm2-135m/tokenizer.json",
+          "bytes": 2104556,
+          "sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c"
+        },
+        {
+          "path": "models/smollm2-135m/tokenizer_config.json",
+          "bytes": 3764,
+          "sha256": "4ec77d44f62efeb38d7e044a1db318f6a939438425312dfa333b8382dbad98df"
+        },
+        {
+          "path": "models/smollm2-135m/vocab.json",
+          "bytes": 800662,
+          "sha256": "82b84012e3add4d01d12ba14442026e49b8cbbaead1f79ecf3d919784f82dc79"
+        }
+      ]
+    }
+  }
+}

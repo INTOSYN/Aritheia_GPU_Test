@@ -1,0 +1,147 @@
+{
+  "schema": "aritheia.native-manifest.v1",
+  "contract": "native-signed-unit-smid-v1",
+  "source": "smid_probe.cu",
+  "source_sha256": "f5484d959b309e28007d8a93da8b6740e580ab7a86ca1ce2e18d0a320c60bd55",
+  "fatbin": "smid_probe.fatbin",
+  "fatbin_sha256": "03247d8a00ca131248e0c3c36bf3c2f1285b9345162478fef8a0df05a6944408",
+  "fatbin_bytes": 101512,
+  "nvcc": [
+    "Cuda compilation tools, release 13.3, V13.3.73",
+    "Build cuda_13.3.r13.3/compiler.38244171_0"
+  ],
+  "sass_targets": [
+    "sm_80",
+    "sm_86",
+    "sm_89",
+    "sm_90",
+    "sm_100",
+    "sm_120"
+  ],
+  "ptx_fallback": "compute_80",
+  "sass_gate": {
+    "sm_80": {
+      "smid_mma_bf16": {
+        "instruction_counts": {
+          "HMMA.16816.F32.BF16": 1,
+          "S2R": 10,
+          "SR_VIRTUALSMID": 2
+        },
+        "gate_passed": true,
+        "sass_sha256": "20d2badf4422a5fc87cb58afe29c4a5124b34bf4e19def46f3e6441728555482"
+      },
+      "smid_ffma_fp32": {
+        "instruction_counts": {
+          "FFMA": 2,
+          "S2R": 4,
+          "SR_VIRTUALSMID": 2
+        },
+        "gate_passed": true,
+        "sass_sha256": "046b6c676f9beb7d579857532b4b629f821bd801517d7e19bc1125f7f90d5aff"
+      }
+    },
+    "sm_86": {
+      "smid_mma_bf16": {
+        "instruction_counts": {
+          "HMMA.16816.F32.BF16": 1,
+          "S2R": 10,
+          "SR_VIRTUALSMID": 2
+        },
+        "gate_passed": true,
+        "sass_sha256": "20d2badf4422a5fc87cb58afe29c4a5124b34bf4e19def46f3e6441728555482"
+      },
+      "smid_ffma_fp32": {
+        "instruction_counts": {
+          "FFMA": 2,
+          "S2R": 4,
+          "SR_VIRTUALSMID": 2
+        },
+        "gate_passed": true,
+        "sass_sha256": "046b6c676f9beb7d579857532b4b629f821bd801517d7e19bc1125f7f90d5aff"
+      }
+    },
+    "sm_89": {
+      "smid_mma_bf16": {
+        "instruction_counts": {
+          "HMMA.16816.F32.BF16": 1,
+          "S2R": 10,
+          "SR_VIRTUALSMID": 2
+        },
+        "gate_passed": true,
+        "sass_sha256": "20d2badf4422a5fc87cb58afe29c4a5124b34bf4e19def46f3e6441728555482"
+      },
+      "smid_ffma_fp32": {
+        "instruction_counts": {
+          "FFMA": 2,
+          "S2R": 4,
+          "SR_VIRTUALSMID": 2
+        },
+        "gate_passed": true,
+        "sass_sha256": "046b6c676f9beb7d579857532b4b629f821bd801517d7e19bc1125f7f90d5aff"
+      }
+    },
+    "sm_90": {
+      "smid_mma_bf16": {
+        "instruction_counts": {
+          "HMMA.16816.F32.BF16": 1,
+          "S2R": 10,
+          "SR_VIRTUALSMID": 2
+        },
+        "gate_passed": true,
+        "sass_sha256": "190cac45a7883324c73f834482d4ceb3f62311033cc0231ced4ae0424829e71e"
+      },
+      "smid_ffma_fp32": {
+        "instruction_counts": {
+          "FFMA": 2,
+          "S2R": 5,
+          "SR_VIRTUALSMID": 2
+        },
+        "gate_passed": true,
+        "sass_sha256": "7281a95ca122997400dff8690bb0307a03d912fb0a04829360090ad421ced257"
+      }
+    },
+    "sm_100": {
+      "smid_mma_bf16": {
+        "instruction_counts": {
+          "HMMA.16816.F32.BF16": 1,
+          "S2R": 8,
+          "SR_VIRTUALSMID": 2
+        },
+        "gate_passed": true,
+        "sass_sha256": "d39ae633aa3d86f04547192e380f03b70eb3898b9b9dff99f563f8404daa0e71"
+      },
+      "smid_ffma_fp32": {
+        "instruction_counts": {
+          "FFMA": 2,
+          "S2R": 4,
+          "SR_VIRTUALSMID": 2
+        },
+        "gate_passed": true,
+        "sass_sha256": "3aa142b0ca225f4e0a20a7d05e453e0b7c293d503927ebc1c6d38272d4f8dd9c"
+      }
+    },
+    "sm_120": {
+      "smid_mma_bf16": {
+        "instruction_counts": {
+          "HMMA.16816.F32.BF16": 1,
+          "S2R": 8,
+          "SR_VIRTUALSMID": 2
+        },
+        "gate_passed": true,
+        "sass_sha256": "69b163dbb1948cb1b007270d5ff57b2c903b5c9528e29ad06ad5909f51c9eff9"
+      },
+      "smid_ffma_fp32": {
+        "instruction_counts": {
+          "FFMA": 2,
+          "S2R": 4,
+          "SR_VIRTUALSMID": 2
+        },
+        "gate_passed": true,
+        "sass_sha256": "4947269de71b78e638099d74706b3f0e094e341b366d587c58251e3a7b43e3a4"
+      }
+    }
+  },
+  "note": "SASS instruction presence was checked by the maintainer with nvdisasm on cubins built from the same source and flags; the client cannot re-check SASS locally (no cuobjdump) and reports this gate as declared.",
+  "original_build_source_sha256": "1d6c37b405b913c60242fbdb418efc67b636d8aa63740c47e1eb1c70bf0893d9",
+  "public_source_change": "Copyright/project-name comments only; executable CUDA source and shipped fatbinary unchanged. No new GPU qualification claimed."
+}

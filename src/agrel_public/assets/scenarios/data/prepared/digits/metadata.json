@@ -1,0 +1,19 @@
+{
+  "dataset": "digits",
+  "task": "classification",
+  "rows": 1797,
+  "features": 64,
+  "split_counts": {
+    "0": 1271,
+    "1": 247,
+    "2": 279
+  },
+  "split_definition": "0=train,1=validation,2=test; normalization fit on train only",
+  "prepared_sha256": "2da5e51c2848d95d7869179eb9466b1465622475b5e7c21d5210d456a3bf3446",
+  "created_utc": "2026-09-09T20:01:26Z",
+  "notes": [
+    "Full scikit-learn bundled dataset snapshot. Split is benchmark-specific, not an official clinical trial split.",
+    "8x8 handwritten digits; small OCR mechanism baseline, not a document-agent benchmark."
+  ],
+  "synthetic": false
+}

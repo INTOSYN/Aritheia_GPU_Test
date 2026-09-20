@@ -1,0 +1,226 @@
+{
+  "dataset": "superconductivity",
+  "training_device": "reference-gpu (raw device UUID withheld for public release)",
+  "training_precision": "fp32_TF32_off",
+  "seed": 20260910,
+  "epochs": 50,
+  "selected_epoch": 43,
+  "train_rows": 14628,
+  "val_rows": 3293,
+  "test_rows": 3342,
+  "dataset_sha256": "32b92c37f9feea69101b1c3bc223994cd49d08a621ed9042ca3c8658c875af11",
+  "weights_sha256": "b9835f80a380cf7c279d150aa41e8ac5b972e815e78deea3b602af0fc389482d",
+  "history": [
+    {
+      "epoch": 0,
+      "validation_mse_normalized": 0.17423903942108154
+    },
+    {
+      "epoch": 1,
+      "validation_mse_normalized": 0.17773044109344482
+    },
+    {
+      "epoch": 2,
+      "validation_mse_normalized": 0.16244040429592133
+    },
+    {
+      "epoch": 3,
+      "validation_mse_normalized": 0.14007773995399475
+    },
+    {
+      "epoch": 4,
+      "validation_mse_normalized": 0.13902534544467926
+    },
+    {
+      "epoch": 5,
+      "validation_mse_normalized": 0.16696375608444214
+    },
+    {
+      "epoch": 6,
+      "validation_mse_normalized": 0.13116343319416046
+    },
+    {
+      "epoch": 7,
+      "validation_mse_normalized": 0.1307883858680725
+    },
+    {
+      "epoch": 8,
+      "validation_mse_normalized": 0.13585546612739563
+    },
+    {
+      "epoch": 9,
+      "validation_mse_normalized": 0.12746384739875793
+    },
+    {
+      "epoch": 10,
+      "validation_mse_normalized": 0.1172463595867157
+    },
+    {
+      "epoch": 11,
+      "validation_mse_normalized": 0.12341522425413132
+    },
+    {
+      "epoch": 12,
+      "validation_mse_normalized": 0.13077397644519806
+    },
+    {
+      "epoch": 13,
+      "validation_mse_normalized": 0.12235095351934433
+    },
+    {
+      "epoch": 14,
+      "validation_mse_normalized": 0.1299346685409546
+    },
+    {
+      "epoch": 15,
+      "validation_mse_normalized": 0.11606176942586899
+    },
+    {
+      "epoch": 16,
+      "validation_mse_normalized": 0.11813780665397644
+    },
+    {
+      "epoch": 17,
+      "validation_mse_normalized": 0.11352916061878204
+    },
+    {
+      "epoch": 18,
+      "validation_mse_normalized": 0.1189284399151802
+    },
+    {
+      "epoch": 19,
+      "validation_mse_normalized": 0.10545655339956284
+    },
+    {
+      "epoch": 20,
+      "validation_mse_normalized": 0.11549102514982224
+    },
+    {
+      "epoch": 21,
+      "validation_mse_normalized": 0.11225630342960358
+    },
+    {
+      "epoch": 22,
+      "validation_mse_normalized": 0.10735248774290085
+    },
+    {
+      "epoch": 23,
+      "validation_mse_normalized": 0.10500852763652802
+    },
+    {
+      "epoch": 24,
+      "validation_mse_normalized": 0.10587527602910995
+    },
+    {
+      "epoch": 25,
+      "validation_mse_normalized": 0.1067618578672409
+    },
+    {
+      "epoch": 26,
+      "validation_mse_normalized": 0.1091497614979744
+    },
+    {
+      "epoch": 27,
+      "validation_mse_normalized": 0.10634637624025345
+    },
+    {
+      "epoch": 28,
+      "validation_mse_normalized": 0.10778338462114334
+    },
+    {
+      "epoch": 29,
+      "validation_mse_normalized": 0.10936976969242096
+    },
+    {
+      "epoch": 30,
+      "validation_mse_normalized": 0.10319598019123077
+    },
+    {
+      "epoch": 31,
+      "validation_mse_normalized": 0.10053741186857224
+    },
+    {
+      "epoch": 32,
+      "validation_mse_normalized": 0.097913958132267
+    },
+    {
+      "epoch": 33,
+      "validation_mse_normalized": 0.10423219203948975
+    },
+    {
+      "epoch": 34,
+      "validation_mse_normalized": 0.10497278720140457
+    },
+    {
+      "epoch": 35,
+      "validation_mse_normalized": 0.10095687210559845
+    },
+    {
+      "epoch": 36,
+      "validation_mse_normalized": 0.09569081664085388
+    },
+    {
+      "epoch": 37,
+      "validation_mse_normalized": 0.09821423143148422
+    },
+    {
+      "epoch": 38,
+      "validation_mse_normalized": 0.1019497662782669
+    },
+    {
+      "epoch": 39,
+      "validation_mse_normalized": 0.1183667927980423
+    },
+    {
+      "epoch": 40,
+      "validation_mse_normalized": 0.09977418929338455
+    },
+    {
+      "epoch": 41,
+      "validation_mse_normalized": 0.09902793914079666
+    },
+    {
+      "epoch": 42,
+      "validation_mse_normalized": 0.10301944613456726
+    },
+    {
+      "epoch": 43,
+      "validation_mse_normalized": 0.0955096036195755
+    },
+    {
+      "epoch": 44,
+      "validation_mse_normalized": 0.10055647790431976
+    },
+    {
+      "epoch": 45,
+      "validation_mse_normalized": 0.10556989163160324
+    },
+    {
+      "epoch": 46,
+      "validation_mse_normalized": 0.09805439412593842
+    },
+    {
+      "epoch": 47,
+      "validation_mse_normalized": 0.09710580855607986
+    },
+    {
+      "epoch": 48,
+      "validation_mse_normalized": 0.0995246171951294
+    },
+    {
+      "epoch": 49,
+      "validation_mse_normalized": 0.10940041393041611
+    }
+  ],
+  "test_rmse": 11.586517503712022,
+  "test_r2": 0.881613221556159,
+  "claim": "Healthy GPU baseline, GPU RNG; no faulty GPU used for fitting.",
+  "public_release_scrub": {
+    "fields": [
+      "training_device"
+    ],
+    "source_file_sha256": "38e8265be8deb9b294b09ea45dd6d9a51cf28491eb9fb385a2bbd13d66cba334",
+    "date": "2026-09-12"
+  },
+  "original_metadata_sha256": "e71bb7fa0d2aa1395d1a9ec0236f9ec88b5aa61befdaf6a7bb292c2b0702443f"
+}

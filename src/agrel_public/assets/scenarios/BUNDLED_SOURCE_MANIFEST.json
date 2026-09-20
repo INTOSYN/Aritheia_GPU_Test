@@ -1,0 +1,54 @@
+[
+  {
+    "file": "data/raw/CHEMBL2321810_act.csv",
+    "sha256": "e74db717fa4704befa07eb41ad4845fa437bf3c12eb2b6a854576dbd2e8819fa",
+    "bytes": 13230,
+    "source_package": "rdkit",
+    "source_package_version": "2025.09.4",
+    "source_relative_path": "Contrib/FreeWilson/data/CHEMBL2321810_act.csv",
+    "source_url": "https://github.com/rdkit/rdkit/blob/master/Contrib/FreeWilson/data/CHEMBL2321810_act.csv",
+    "scope": "Complete bundled example file, not complete upstream scientific database"
+  },
+  {
+    "file": "data/raw/CHEMBL2321810.smi",
+    "sha256": "3feff3aa19f16c7a3aa8695acddd442d1fb3d582485bb7fe8754e7b36dc1894f",
+    "bytes": 66037,
+    "source_package": "rdkit",
+    "source_package_version": "2025.09.4",
+    "source_relative_path": "Contrib/FreeWilson/data/CHEMBL2321810.smi",
+    "source_url": "https://github.com/rdkit/rdkit/blob/master/Contrib/FreeWilson/data/CHEMBL2321810.smi",
+    "scope": "Complete bundled example file, not complete upstream scientific database"
+  },
+  {
+    "file": "data/raw/first_5K.smi",
+    "sha256": "91e71c015f14939837f2943dcc904f7c87e5a3a0124d82b05c28ad2f23004def",
+    "bytes": 192664,
+    "source_package": "rdkit",
+    "source_package_version": "2025.09.4",
+    "source_relative_path": "Data/NCI/first_5K.smi",
+    "source_url": "https://github.com/rdkit/rdkit/blob/master/Data/NCI/first_5K.smi",
+    "scope": "Complete bundled example file, not complete upstream scientific database"
+  },
+  {
+    "file": "data/raw/breast_cancer.npz",
+    "sha256": "c056b2713abb76e83b305eb1ab3be0fbbf40a29cc697b0ee4c9b599b053775bf",
+    "bytes": 58483,
+    "source_package": "scikit-learn",
+    "source_package_version": "1.8.0",
+    "source_url": "https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html",
+    "rows": 569,
+    "features": 30,
+    "transformation": "digits pixel intensities divided by 16; breast features unchanged"
+  },
+  {
+    "file": "data/raw/digits.npz",
+    "sha256": "c1805bd68a0c6c156a9d572148b297283a897aec2b03642d6a0f4e9bfd713c22",
+    "bytes": 73297,
+    "source_package": "scikit-learn",
+    "source_package_version": "1.8.0",
+    "source_url": "https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html",
+    "rows": 1797,
+    "features": 64,
+    "transformation": "digits pixel intensities divided by 16; breast features unchanged"
+  }
+]

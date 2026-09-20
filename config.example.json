@@ -1,0 +1,17 @@
+{
+  "api_url": "",
+  "public_keys": {},
+  "asset_release_url": "",
+  "network_timeout": 4.0,
+  "max_pack_bytes": 16777216,
+  "worker_timeout": 240,
+  "scenario_timeout": 1800,
+  "iterations": 8,
+  "memory_roundtrip_mib": 128,
+  "max_probe_memory_mib": 512,
+  "max_probe_repeats": 8,
+  "allow_local_http": false,
+  "telemetry": "auto",
+  "telemetry_url": "https://data.intc.ca:8443/sci-test",
+  "max_parallel_gpus": 2
+}

@@ -1,0 +1,28 @@
+{
+  "dataset": "splice",
+  "task": "classification",
+  "rows": 3190,
+  "features": 240,
+  "split_counts": {
+    "0": 2232,
+    "1": 496,
+    "2": 462
+  },
+  "split_definition": "Identical sequence SHA256 groups; 0 train/1 val/2 test",
+  "prepared_sha256": "a30a555634ea7b660e6a967f8cc749d95d85113de4cdd4f5267d485f6753e2a3",
+  "synthetic": false,
+  "prepare_device": "reference-gpu (raw device UUID withheld for public release)",
+  "notes": [
+    "Full 3190 UCI splice rows; EI/IE/N=0/1/2.",
+    "GPU ambiguity-base weighting, no standardization.",
+    "Identical sequences grouped; lightweight baseline, not modern genomics foundation model."
+  ],
+  "public_release_scrub": {
+    "fields": [
+      "prepare_device"
+    ],
+    "source_file_sha256": "5393aca9f9756de846d4f1ad22a9c1ebd031184dd6aedb5b9da9e2885088bceb",
+    "date": "2026-09-12"
+  },
+  "original_metadata_sha256": "cb200bc6a76ab32ee720e2977c0e56236a730467bbe11994cb69665d33a87a85"
+}

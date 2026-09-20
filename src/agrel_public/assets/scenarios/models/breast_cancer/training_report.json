@@ -1,0 +1,218 @@
+{
+  "dataset": "breast_cancer",
+  "training_device": "cpu",
+  "training_precision": "fp32",
+  "seed": 20260910,
+  "epochs": 50,
+  "selected_epoch": 5,
+  "model": "MLP(input,512,256,output); ReLU; no dropout",
+  "train_rows": 401,
+  "val_rows": 83,
+  "test_rows": 85,
+  "dataset_sha256": "8c7e17a6532c47aa6b070bcc6aa734fe754bb38a2bb2199e6373332048cf2fd0",
+  "weights_sha256": "340678d9930c0d375922df3714bedb15fa75a5d39bf1bae46700cfb458a3f816",
+  "history": [
+    {
+      "epoch": 0,
+      "validation_loss": 0.21584026515483856
+    },
+    {
+      "epoch": 1,
+      "validation_loss": 0.06915560364723206
+    },
+    {
+      "epoch": 2,
+      "validation_loss": 0.033768460154533386
+    },
+    {
+      "epoch": 3,
+      "validation_loss": 0.03149670362472534
+    },
+    {
+      "epoch": 4,
+      "validation_loss": 0.026044761762022972
+    },
+    {
+      "epoch": 5,
+      "validation_loss": 0.020652463659644127
+    },
+    {
+      "epoch": 6,
+      "validation_loss": 0.03541087731719017
+    },
+    {
+      "epoch": 7,
+      "validation_loss": 0.034647319465875626
+    },
+    {
+      "epoch": 8,
+      "validation_loss": 0.027958031743764877
+    },
+    {
+      "epoch": 9,
+      "validation_loss": 0.023659339174628258
+    },
+    {
+      "epoch": 10,
+      "validation_loss": 0.025994665920734406
+    },
+    {
+      "epoch": 11,
+      "validation_loss": 0.03361702710390091
+    },
+    {
+      "epoch": 12,
+      "validation_loss": 0.045451391488313675
+    },
+    {
+      "epoch": 13,
+      "validation_loss": 0.05518028512597084
+    },
+    {
+      "epoch": 14,
+      "validation_loss": 0.04887291416525841
+    },
+    {
+      "epoch": 15,
+      "validation_loss": 0.046064745634794235
+    },
+    {
+      "epoch": 16,
+      "validation_loss": 0.04979286342859268
+    },
+    {
+      "epoch": 17,
+      "validation_loss": 0.05860598757863045
+    },
+    {
+      "epoch": 18,
+      "validation_loss": 0.06830357015132904
+    },
+    {
+      "epoch": 19,
+      "validation_loss": 0.08162055164575577
+    },
+    {
+      "epoch": 20,
+      "validation_loss": 0.0962967723608017
+    },
+    {
+      "epoch": 21,
+      "validation_loss": 0.10706239938735962
+    },
+    {
+      "epoch": 22,
+      "validation_loss": 0.10444172471761703
+    },
+    {
+      "epoch": 23,
+      "validation_loss": 0.10136373341083527
+    },
+    {
+      "epoch": 24,
+      "validation_loss": 0.10382038354873657
+    },
+    {
+      "epoch": 25,
+      "validation_loss": 0.11383670568466187
+    },
+    {
+      "epoch": 26,
+      "validation_loss": 0.12729117274284363
+    },
+    {
+      "epoch": 27,
+      "validation_loss": 0.14244890213012695
+    },
+    {
+      "epoch": 28,
+      "validation_loss": 0.15612734854221344
+    },
+    {
+      "epoch": 29,
+      "validation_loss": 0.15560992062091827
+    },
+    {
+      "epoch": 30,
+      "validation_loss": 0.15636861324310303
+    },
+    {
+      "epoch": 31,
+      "validation_loss": 0.15133880078792572
+    },
+    {
+      "epoch": 32,
+      "validation_loss": 0.1481112241744995
+    },
+    {
+      "epoch": 33,
+      "validation_loss": 0.1431536227464676
+    },
+    {
+      "epoch": 34,
+      "validation_loss": 0.13737493753433228
+    },
+    {
+      "epoch": 35,
+      "validation_loss": 0.1346828043460846
+    },
+    {
+      "epoch": 36,
+      "validation_loss": 0.13747601211071014
+    },
+    {
+      "epoch": 37,
+      "validation_loss": 0.1415349245071411
+    },
+    {
+      "epoch": 38,
+      "validation_loss": 0.14396576583385468
+    },
+    {
+      "epoch": 39,
+      "validation_loss": 0.13778340816497803
+    },
+    {
+      "epoch": 40,
+      "validation_loss": 0.127995103597641
+    },
+    {
+      "epoch": 41,
+      "validation_loss": 0.12142816931009293
+    },
+    {
+      "epoch": 42,
+      "validation_loss": 0.12115572392940521
+    },
+    {
+      "epoch": 43,
+      "validation_loss": 0.12802071869373322
+    },
+    {
+      "epoch": 44,
+      "validation_loss": 0.14157667756080627
+    },
+    {
+      "epoch": 45,
+      "validation_loss": 0.15408970415592194
+    },
+    {
+      "epoch": 46,
+      "validation_loss": 0.1637287437915802
+    },
+    {
+      "epoch": 47,
+      "validation_loss": 0.17119631171226501
+    },
+    {
+      "epoch": 48,
+      "validation_loss": 0.17687229812145233
+    },
+    {
+      "epoch": 49,
+      "validation_loss": 0.18061363697052002
+    }
+  ],
+  "test_accuracy": 0.9764705882352941,
+  "claim": "Functional lightweight baseline only; not a published leaderboard reproduction. No faulty GPU used in fitting."
+}

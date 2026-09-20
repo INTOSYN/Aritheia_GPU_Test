@@ -1,0 +1,42 @@
+[
+  {
+    "row": 2097,
+    "id": "2110",
+    "smiles": "O[Hg]C1=CC=CC=C1.[O-][N+](=O)(=O)[Hg]C2=CC=CC=C2"
+  },
+  {
+    "row": 2897,
+    "id": "2917",
+    "smiles": "O=C1O[Al]23(OC1=O)(OC(=O)C(=O)O2)OC(=O)C(=O)O3"
+  },
+  {
+    "row": 3226,
+    "id": "3249",
+    "smiles": "NC(N)=[O+][Al+3]([O+]=C(N)N)([O+]=C(N)N)([O+]=C(N)N)([O+]=C(N)N)[O+]=C(N)N.[O-]S([O-])(=O)=O.I[I]I"
+  },
+  {
+    "row": 3369,
+    "id": "3402",
+    "smiles": "CCCCNCCCC.F[Si](F)(F)(F)(F)F"
+  },
+  {
+    "row": 4508,
+    "id": "4563",
+    "smiles": "CCO1=O=C1C2=CC=C(O2)C(C)(C)C"
+  },
+  {
+    "row": 4595,
+    "id": "4650",
+    "smiles": "CC1=[O+][Al]23([O+]=C(C)C1)([O+]=C(C)CC(=[O+]2)C)[O+]=C(C)CC(=[O+]3)C"
+  },
+  {
+    "row": 4596,
+    "id": "4651",
+    "smiles": "CC1=[O+][Be]2([O+]=C(C)C1)[O+]=C(C)CC(=[O+]2)C"
+  },
+  {
+    "row": 4780,
+    "id": "4844",
+    "smiles": "CCCCCCCCCCCCCCCC[N+](C)(C)CC1=CC=CC=C1.F[P](F)(F)(F)(F)F"
+  }
+]

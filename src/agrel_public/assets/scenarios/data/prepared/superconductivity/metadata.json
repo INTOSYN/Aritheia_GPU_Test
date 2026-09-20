@@ -1,0 +1,27 @@
+{
+  "dataset": "superconductivity",
+  "task": "regression",
+  "rows": 21263,
+  "features": 81,
+  "split_counts": {
+    "0": 14628,
+    "1": 3293,
+    "2": 3342
+  },
+  "split_definition": "Original seed/formula hash groups; train-only normalization",
+  "prepared_sha256": "32b92c37f9feea69101b1c3bc223994cd49d08a621ed9042ca3c8658c875af11",
+  "synthetic": false,
+  "prepare_device": "reference-gpu (raw device UUID withheld for public release)",
+  "notes": [
+    "Full UCI critical temperature data; identical formula does not cross splits.",
+    "GPU train-only normalization; lightweight regression benchmark, not DFT or physical synthesis."
+  ],
+  "public_release_scrub": {
+    "fields": [
+      "prepare_device"
+    ],
+    "source_file_sha256": "205663b5660f30b5036b1d77a21f9c52cb7dcfffff0ec596a65f0569ae0705de",
+    "date": "2026-09-12"
+  },
+  "original_metadata_sha256": "80557564070c13716ecfe91cb54d27d0d0bb1ae16a15a1f3fcfa6934b713ecae"
+}
